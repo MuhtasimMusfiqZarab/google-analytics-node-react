@@ -12,6 +12,17 @@ app.use(cors());
 //used if we want to use some fun stuffs with socket.io
 const server = require('http').createServer(app);
 
+// ---------------fixing bug because the front end request says getData is not defined
+require('./libraries/gAnalytics'); //************************************************************* */
+
+// Config--------------------------------------------------------
+//setting a global constant for port
+const port = process.env.SERVER_PORT;
+//change static path based on NODE_ENV variable
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+}
+
 //----------------combine gAnalytics library & server ------------
 
 //this path allows the client to request a list of metrics( or a metric)-- & returns all the data when relrives at once
@@ -78,14 +89,6 @@ app.get('/api/graph', (req, res) => {
       console.log('Done');
     });
 });
-
-// Config--------------------------------------------------------
-//setting a global constant for port
-const port = process.env.SERVER_PORT;
-//change static path based on NODE_ENV variable
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/build'));
-}
 
 //------server listening to port---------
 server.listen(port, () => {

@@ -81,4 +81,6 @@ function getData(
 }
 
 //exporting getData
-module.exports = { getData };
+// module.exports = { getData };----------------------old code
+
+module.exports = getData; //bug fix code
