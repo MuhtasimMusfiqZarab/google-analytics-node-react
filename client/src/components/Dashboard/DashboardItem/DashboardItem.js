@@ -55,7 +55,15 @@ class DashboardItem extends Component {
   }
   getMetricData() {
     const { visual, metric } = this.state;
+    //this is for socket.io which set our state and returns us out of the getMetricData  function
+
     const strippedMetric = metric.replace(' ', '');
+
+    // Do not need to retrieve metric data if metric is real time, handled in component
+    if (metric.toUpperCase() === 'REAL TIME') {
+      this.setState({ data: 'Real Time' });
+      return;
+    }
 
     let url;
     if (visual === 'chart') {
@@ -113,6 +121,10 @@ class DashboardItem extends Component {
     let component;
     if (data === 'No data') {
       component = <TextItem data={data} />;
+    }
+    //this is for real-time socket io
+    else if (data === 'Real Time') {
+      component = <RealTimeItem />;
     } else {
       switch (visual) {
         case 'chart':

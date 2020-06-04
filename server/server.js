@@ -12,6 +12,9 @@ app.use(cors());
 //used if we want to use some fun stuffs with socket.io
 const server = require('http').createServer(app);
 
+//for realtime data communication
+const io = require('socket.io').listen(server);
+
 // ---------------fixing bug because the front end request says getData is not defined
 require('./libraries/gAnalytics'); //************************************************************* */
 
@@ -88,6 +91,20 @@ app.get('/api/graph', (req, res) => {
       res.send({ status: 'Error', message: `${err}` });
       console.log('Done');
     });
+});
+
+//allows the server to listen for sockets connecting to it and sending it a message
+// when server receives a message it will emit a 'pageView' event to all the sockets (this is not probably the safest thing to do)
+
+io.sockets.on('connection', (socket) => {
+  socket.on('message', (message) => {
+    console.log('Received message:');
+    console.log(message);
+    console.log(Object.keys(io.sockets.connected).length);
+    io.sockets.emit('pageview', {
+      connections: Object.keys(io.sockets.connected).length - 1,
+    });
+  });
 });
 
 //------server listening to port---------
