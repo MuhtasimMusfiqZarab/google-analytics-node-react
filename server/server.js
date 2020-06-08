@@ -16,7 +16,7 @@ const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
 
 // ---------------fixing bug because the front end request says getData is not defined
-require('./libraries/gAnalytics'); //************************************************************* */
+const getData = require('./libraries/gAnalytics'); //************************************************************* */
 
 // Config--------------------------------------------------------
 //setting a global constant for port
